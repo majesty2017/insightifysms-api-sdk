@@ -1,12 +1,12 @@
-# insightifysms SMS PHP SDK
+# Insightify SMS PHP SDK
 
-The Insightify SMS PHP SDK provides a suitable approach to the Insightify SMS API from applications written in PHP. It includes pre-defined set of classes and functions for API resource that initialize themeselves from  API responses.
+The Insightify SMS PHP SDK provides a suitable approach to the Insightify SMS API from applications written in PHP. It includes pre-defined set of classes and functions for API resource that initialize themselves from  API responses.
 
 The library provides other features. For Example:
 1. Easy configuration path for fast setup and use
 2. Helpers for pagination.
 
-You can sign up for an Insightify SMS account at [insightifysms.com](https://.\Insightify\InsightifySMS()gh.com)
+You can sign up for an Insightify SMS account at [insightifysms.com](https://insightifysms.com)
 
 ## Prerequisites
 PHP ^8.0 and later
@@ -23,7 +23,7 @@ git clone https://github.com/majesty2017/insightifysms-api-sdk.git
 ```
 
 ## Documentation
-Please see [http/\Insightify\InsightifySMS()gh.com/developer/](http/\Insightify\InsightifySMS()gh.com/developer/) for up-to-date documentation
+Please see [https://insightifysms.com/developer](https://insightifysms.com/developer) for up-to-date documentation
 
 ## Usage
 
@@ -63,7 +63,7 @@ For more information on how to get an API Key visit [here](https://app.insightif
 
 
 ### Step 2:
-Instantiate the insightifySMSPHPAPI
+Instantiate the InsightifySMSPHPAPI
 ```php
 $client = new Insightify\InsightifySMS();
 ```

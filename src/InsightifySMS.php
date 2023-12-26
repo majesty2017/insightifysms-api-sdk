@@ -18,7 +18,7 @@ class InsightifySMS
      * Send Request to server and get sms status
      */
 
-    private function send_server_response($endpoint, $api_token, $sender_id, $recipient, $message, $request_method = null)
+    private function send_server_response($endpoint, $api_token, $sender_id, $recipient, $message, $request_method = null): mixed
     {
         //Initialize the curl handle if it is not initialized yet
         if (!isset($this::$curl_handle)) {
@@ -85,7 +85,7 @@ class InsightifySMS
      *
      * Send single / group SMS
      */
-    public function send_sms($endpoint, $api_token, $sender_id, $phones, $message)
+    public function send_sms($endpoint, $api_token, $sender_id, $phones, $message): mixed
     {
         return $this->send_server_response($endpoint, $api_token, $sender_id, self::phone($phones), $message, 'post');
     }
@@ -97,12 +97,17 @@ class InsightifySMS
      *
      * View an SMS
      */
-    public function view_sms($url, $api_token)
+    public function view_sms($url, $api_token): mixed
     {
         return $this->send_server_response($url, $api_token, '','', '');
     }
 
-    protected static function phone(string|array $phone, string $code = '233')
+    /**
+     * @param string|array $phone
+     * @param string $code
+     * @return array|string|string[]|null
+     */
+    protected static function phone(string|array $phone, string $code = '233'): array|string|null
     {
         return preg_replace('/^0/', $code, $phone);
     }
@@ -115,7 +120,7 @@ class InsightifySMS
      *
      * View profile
      */
-    public function profile($url, $api_token)
+    public function profile($url, $api_token): mixed
     {
         return $this->send_server_response($url, $api_token, '', '', '');
     }
@@ -128,7 +133,7 @@ class InsightifySMS
      *
      * View sms credit balance
      */
-    public function check_balance($url, $api_token)
+    public function check_balance($url, $api_token): mixed
     {
 
         return $this->send_server_response($url, $api_token, '', '', '');
@@ -145,7 +150,7 @@ class InsightifySMS
      *
      * Create a new Contact Group
      */
-    public function create_contact_group($endpoint, $api_token, $sender_id, $phones, $message)
+    public function create_contact_group($endpoint, $api_token, $sender_id, $phones, $message): mixed
     {
         return $this->send_server_response($endpoint, $api_token, $sender_id, $phones, $message, 'post');
     }
@@ -159,22 +164,23 @@ class InsightifySMS
      *
      * View Contact Group
      */
-    public function view_contact_group($url, $api_token)
+    public function view_contact_group($url, $api_token): mixed
     {
         return $this->send_server_response($url, $api_token, '', '', 'post');
     }
 
 
-
     /**
-     * @param $url
+     * @param $endpoint
      * @param $api_token
-     * @param $post_fields
+     * @param $sender_id
+     * @param $phones
+     * @param $message
      * @return mixed
      *
      * Update Contact Group
      */
-    public function update_contact_group($endpoint, $api_token, $sender_id, $phones, $message)
+    public function update_contact_group($endpoint, $api_token, $sender_id, $phones, $message): mixed
     {
         return $this->send_server_response($endpoint, $api_token, $sender_id, $phones, $message, 'patch');
     }
@@ -188,7 +194,7 @@ class InsightifySMS
      *
      * Delete Contact Group
      */
-    public function delete_contact_group($url, $api_token)
+    public function delete_contact_group($url, $api_token): mixed
     {
         return $this->send_server_response($url, $api_token, '', '', 'delete');
     }
@@ -202,7 +208,7 @@ class InsightifySMS
      *
      * View all Contact Groups
      */
-    public function all_contact_groups($url, $api_token)
+    public function all_contact_groups($url, $api_token): mixed
     {
         return $this->send_server_response($url, $api_token, '', '', '');
     }
@@ -218,7 +224,7 @@ class InsightifySMS
      *
      * Creates a new contact object
      */
-    public function create_contact($endpoint, $api_token, $sender_id, $phones, $message)
+    public function create_contact($endpoint, $api_token, $sender_id, $phones, $message): mixed
     {
         return $this->send_server_response($endpoint, $api_token, $sender_id, $phones, $message, 'post');
     }
@@ -231,7 +237,7 @@ class InsightifySMS
      *
      * Retrieves the information of an existing contact
      */
-    public function view_contact($url, $api_token)
+    public function view_contact($url, $api_token): mixed
     {
         return $this->send_server_response($url, $api_token, '', '', 'post');
     }
@@ -247,7 +253,7 @@ class InsightifySMS
      *
      * Update an existing contact.
      */
-    public function update_contact($endpoint, $api_token, $sender_id, $phones, $message)
+    public function update_contact($endpoint, $api_token, $sender_id, $phones, $message): mixed
     {
         return $this->send_server_response($endpoint, $api_token, $sender_id, $phones, $message, 'patch');
     }
@@ -261,7 +267,7 @@ class InsightifySMS
      *
      * Delete an existing contact
      */
-    public function delete_contact($url, $api_token)
+    public function delete_contact($url, $api_token): mixed
     {
         return $this->send_server_response($url, $api_token, '', '', 'delete');
     }
@@ -275,7 +281,7 @@ class InsightifySMS
      *
      * View all contacts in group
      */
-    public function all_contacts_in_group($url, $api_token)
+    public function all_contacts_in_group($url, $api_token): mixed
     {
         return $this->send_server_response($url, $api_token, '', '', 'post');
     }
