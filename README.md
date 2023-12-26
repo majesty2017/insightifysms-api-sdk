@@ -39,7 +39,7 @@ If you install insightify SMS PHP SDK via [Composer](http://getcomposer.org/) re
 
 ```php
 require __DIR__ . '/vendor/autoload.php';
-use use Insightify\InsightifySMS;
+use Insightify\InsightifySMS;
 ```
 
 The insightify SMS PHP SDK endpoints are RESTful, and consume and return JSON. All Http endpoints requires an API Key in the request header.
@@ -63,7 +63,7 @@ For more information on how to get an API Key visit [here](https://app.insightif
 
 
 ### Step 2:
-Instantiate the InsightifySMSPHPAPI
+Instantiate the InsightifySMSSDKAPI
 ```php
 $client = new Insightify\InsightifySMS();
 ```
