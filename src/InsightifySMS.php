@@ -6,19 +6,26 @@ class InsightifySMS
 {
     static $curl_handle = NULL;
 
+    private string $_api_token, $_sender_id;
+    public string $endpoint;
+
+    public function __construct($api_token, $sender_id)
+    {
+        $this->_api_token = $api_token;
+        $this->_sender_id = $sender_id;
+        $this->endpoint = '"https://app.insightifysms.com/api/v3/sms/send"';
+    }
+
     /**
-     * @param $endpoint
-     * @param $api_token
-     * @param $sender_id
      * @param $recipient
      * @param $message
-     * @param $request_method
+     * @param null $request_method
      * @return mixed
      *
      * Send Request to server and get sms status
      */
 
-    private function send_server_response($endpoint, $api_token, $sender_id, $recipient, $message, $request_method = null): mixed
+    private function send_server_response($endpoint, $recipient, $message, $request_method = null): mixed
     {
         //Initialize the curl handle if it is not initialized yet
         if (!isset($this::$curl_handle)) {
@@ -27,11 +34,12 @@ class InsightifySMS
 
         $data = json_encode([
             'recipient' => $recipient,
-            'sender_id' => $sender_id,
+            'sender_id' => $this->_sender_id,
             'message' => $message,
         ]);
 
         curl_setopt ($this::$curl_handle, CURLOPT_URL, $endpoint);
+
         if ($request_method == 'post') {
             curl_setopt ($this::$curl_handle, CURLOPT_POST, true);
             curl_setopt ($this::$curl_handle, CURLOPT_POSTFIELDS, $data);
@@ -57,7 +65,7 @@ class InsightifySMS
         curl_setopt ($this::$curl_handle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt ($this::$curl_handle, CURLOPT_HTTPHEADER, [
             "accept: application/json",
-            "authorization: Bearer ".$api_token
+            "authorization: Bearer ".$this->_api_token
         ]);
 
         // Allow cURL function to execute 20sec
@@ -76,36 +84,32 @@ class InsightifySMS
 
 
     /**
-     * @param $endpoint
-     * @param $api_token
-     * @param $sender_id
      * @param $phones
      * @param $message
      * @return mixed
      *
      * Send single / group SMS
      */
-    public function send_sms($endpoint, $api_token, $sender_id, $phones, $message): mixed
+    public function send_sms($phones, $message): mixed
     {
-        return $this->send_server_response($endpoint, $api_token, $sender_id, self::phone($phones), $message, 'post');
+        return $this->send_server_response($this->endpoint, self::phone($phones), $message, 'post');
     }
 
     /**
      * @param $url
-     * @param $api_token
      * @return mixed
      *
      * View an SMS
      */
-    public function view_sms($url, $api_token): mixed
+    public function view_sms($url): mixed
     {
-        return $this->send_server_response($url, $api_token, '','', '');
+        return $this->send_server_response($url, '','');
     }
 
-    /**
+    /** format the phone number
      * @param string|array $phone
      * @param string $code
-     * @return array|string|string[]|null
+     * @return array|string|null
      */
     protected static function phone(string|array $phone, string $code = '233'): array|string|null
     {
@@ -115,175 +119,150 @@ class InsightifySMS
 
     /**
      * @param $url
-     * @param $api_token
      * @return mixed
      *
      * View profile
      */
-    public function profile($url, $api_token): mixed
+    public function profile($url): mixed
     {
-        return $this->send_server_response($url, $api_token, '', '', '');
+        return $this->send_server_response($url, '', '');
     }
 
 
     /**
      * @param $url
-     * @param $api_token
      * @return mixed
      *
      * View sms credit balance
      */
-    public function check_balance($url, $api_token): mixed
+    public function check_balance($url): mixed
     {
 
-        return $this->send_server_response($url, $api_token, '', '', '');
+        return $this->send_server_response($url, '', '');
     }
 
 
     /**
-     * @param $endpoint
-     * @param $api_token
-     * @param $sender_id
      * @param $phones
      * @param $message
      * @return mixed
      *
      * Create a new Contact Group
      */
-    public function create_contact_group($endpoint, $api_token, $sender_id, $phones, $message): mixed
+    public function create_contact_group($phones, $message): mixed
     {
-        return $this->send_server_response($endpoint, $api_token, $sender_id, $phones, $message, 'post');
+        return $this->send_server_response($this->endpoint, $phones, $message, 'post');
     }
-
 
 
     /**
      * @param $url
-     * @param $api_token
      * @return mixed
      *
      * View Contact Group
      */
-    public function view_contact_group($url, $api_token): mixed
+    public function view_contact_group($url): mixed
     {
-        return $this->send_server_response($url, $api_token, '', '', 'post');
+        return $this->send_server_response($url, '', '', 'post');
     }
 
 
     /**
-     * @param $endpoint
-     * @param $api_token
-     * @param $sender_id
      * @param $phones
      * @param $message
      * @return mixed
      *
      * Update Contact Group
      */
-    public function update_contact_group($endpoint, $api_token, $sender_id, $phones, $message): mixed
+    public function update_contact_group($phones, $message): mixed
     {
-        return $this->send_server_response($endpoint, $api_token, $sender_id, $phones, $message, 'patch');
+        return $this->send_server_response($this->endpoint, $phones, $message, 'patch');
     }
-
 
 
     /**
      * @param $url
-     * @param $api_token
      * @return mixed
      *
      * Delete Contact Group
      */
-    public function delete_contact_group($url, $api_token): mixed
+    public function delete_contact_group($url): mixed
     {
-        return $this->send_server_response($url, $api_token, '', '', 'delete');
+        return $this->send_server_response($url, '', '', 'delete');
     }
-
 
 
     /**
      * @param $url
-     * @param $api_token
      * @return mixed
      *
      * View all Contact Groups
      */
-    public function all_contact_groups($url, $api_token): mixed
+    public function all_contact_groups($url): mixed
     {
-        return $this->send_server_response($url, $api_token, '', '', '');
+        return $this->send_server_response($url, '', '');
     }
 
 
     /**
-     * @param $endpoint
-     * @param $api_token
-     * @param $sender_id
      * @param $phones
      * @param $message
      * @return mixed
      *
      * Creates a new contact object
      */
-    public function create_contact($endpoint, $api_token, $sender_id, $phones, $message): mixed
+    public function create_contact($phones, $message): mixed
     {
-        return $this->send_server_response($endpoint, $api_token, $sender_id, $phones, $message, 'post');
+        return $this->send_server_response($this->endpoint, $phones, $message, 'post');
     }
 
 
     /**
      * @param $url
-     * @param $api_token
      * @return mixed
      *
      * Retrieves the information of an existing contact
      */
-    public function view_contact($url, $api_token): mixed
+    public function view_contact($url): mixed
     {
-        return $this->send_server_response($url, $api_token, '', '', 'post');
+        return $this->send_server_response($url, '', '', 'post');
     }
 
 
     /**
-     * @param $endpoint
-     * @param $api_token
-     * @param $sender_id
      * @param $phones
      * @param $message
      * @return mixed
      *
      * Update an existing contact.
      */
-    public function update_contact($endpoint, $api_token, $sender_id, $phones, $message): mixed
+    public function update_contact($phones, $message): mixed
     {
-        return $this->send_server_response($endpoint, $api_token, $sender_id, $phones, $message, 'patch');
+        return $this->send_server_response($this->endpoint, $phones, $message, 'patch');
     }
-
 
 
     /**
      * @param $url
-     * @param $api_token
      * @return mixed
      *
      * Delete an existing contact
      */
-    public function delete_contact($url, $api_token): mixed
+    public function delete_contact($url): mixed
     {
-        return $this->send_server_response($url, $api_token, '', '', 'delete');
+        return $this->send_server_response($url, '', '', 'delete');
     }
-
 
 
     /**
      * @param $url
-     * @param $api_token
      * @return mixed
      *
      * View all contacts in group
      */
-    public function all_contacts_in_group($url, $api_token): mixed
+    public function all_contacts_in_group($url): mixed
     {
-        return $this->send_server_response($url, $api_token, '', '', 'post');
+        return $this->send_server_response($url, '', '', 'post');
     }
 
 }
